@@ -10,12 +10,28 @@ espacio entre palabra y palabra.
 
 """
 import pandas as pd
+import re
 
 
 def ingest_data():
 
-    #
-    # Inserte su código aquí
-    #
+    df = open('clusters_report.txt', "r")
+    lines = df.readlines()
+    df.close()
+    for index, line in enumerate(lines):
+        lines[index] = line.strip()
 
-    return df
+    df_result = pd.DataFrame(columns=('cluster','cantidad','porcentaje','palabras'))
+    i = 0  
+    first_col = "" 
+    second_col = ""  
+    for line in lines:
+        if 'X' in line:
+            first_col = line.replace(' ', "_")
+        else:
+            second_col = re.sub(r' \(.*', "", line)
+            df_result.loc[i] = [first_col, second_col]
+            i =i+1
+
+    return df_result
+print(ingest_data())
